@@ -1,0 +1,21 @@
+{
+  "language": {
+    "feature": "en"
+  },
+  "bindingCulture": {
+    "name": "en-US"
+  },
+  "runtime": {
+    "dependencies": [
+      {
+        "type": "registration",
+        "implementation": "WebDriverAutomationFramework.Hooks.TestHooks"
+      }
+    ]
+  },
+  "trace": {
+    "traceSuccessfulSteps": true,
+    "traceTimings": true,
+    "minTracedDuration": "0:0:0.1"
+  }
+}
