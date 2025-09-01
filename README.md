@@ -138,7 +138,7 @@ Pruebas de interacción con formularios y elementos de entrada.
 ## Extensibilidad
 
 ### Agregar nuevos Page Objects
-```csharp
+\`\`\`csharp
 public class NewPage : BasePage
 {
     private readonly By _newElement = By.Id("new-element");
