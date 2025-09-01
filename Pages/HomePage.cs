@@ -1,5 +1,6 @@
 using OpenQA.Selenium;
 using WebDriverAutomationFramework.Config;
+using System.Threading;
 
 namespace WebDriverAutomationFramework.Pages
 {
@@ -35,7 +36,7 @@ namespace WebDriverAutomationFramework.Pages
             return IsElementVisible(_mainContent, 15);
         }
 
-        public string GetPageTitle()
+        public new string GetPageTitle()
         {
             if (IsElementVisible(_pageTitle, 5))
             {
