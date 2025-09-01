@@ -3,7 +3,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Edge;
 using WebDriverAutomationFramework.Config;
-using WebDriverManager;
+using WDM = WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
 
 namespace WebDriverAutomationFramework.Driver
@@ -40,7 +40,7 @@ namespace WebDriverAutomationFramework.Driver
 
         private static IWebDriver CreateChromeDriver()
         {
-            new DriverManager().SetUpDriver(new ChromeConfig());
+            new WDM.DriverManager().SetUpDriver(new ChromeConfig());
             
             var options = new ChromeOptions();
             
@@ -64,7 +64,7 @@ namespace WebDriverAutomationFramework.Driver
 
         private static IWebDriver CreateFirefoxDriver()
         {
-            new DriverManager().SetUpDriver(new FirefoxConfig());
+            new WDM.DriverManager().SetUpDriver(new FirefoxConfig());
             
             var options = new FirefoxOptions();
             
@@ -78,7 +78,7 @@ namespace WebDriverAutomationFramework.Driver
 
         private static IWebDriver CreateEdgeDriver()
         {
-            new DriverManager().SetUpDriver(new EdgeConfig());
+            new WDM.DriverManager().SetUpDriver(new EdgeConfig());
             
             var options = new EdgeOptions();
             
