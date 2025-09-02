@@ -1,6 +1,8 @@
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 using WebDriverAutomationFramework.Config;
-using System.Threading;
+using System;
 
 namespace WebDriverAutomationFramework.Pages
 {
@@ -11,29 +13,52 @@ namespace WebDriverAutomationFramework.Pages
         // Page Elements
         private readonly By _pageTitle = By.TagName("h1");
         private readonly By _navigationMenu = By.TagName("nav");
-        private readonly By _mainContent = By.TagName("main");
+        private readonly By _mainContent = By.Id("root");
         private readonly By _footer = By.TagName("footer");
         private readonly By _loadingIndicator = By.CssSelector(".loading, .spinner");
-        
-        // Form elements (assuming there might be a form)
+
+        // Form elements
         private readonly By _inputField = By.CssSelector("input[type='text'], input[type='email']");
         private readonly By _submitButton = By.CssSelector("button[type='submit'], .submit-btn");
         private readonly By _successMessage = By.CssSelector(".success, .alert-success");
         private readonly By _errorMessage = By.CssSelector(".error, .alert-error");
 
+        // Helper for explicit wait
+        private WebDriverWait GetWait(int seconds) => new WebDriverWait(Driver, TimeSpan.FromSeconds(seconds));
+
         public void NavigateToHomePage()
         {
             NavigateToUrl(_config.BaseUrl);
+            WaitForLoadingToComplete();
         }
 
         public void NavigateToLocalHomePage()
         {
             NavigateToUrl(_config.LocalUrl);
+            WaitForLoadingToComplete();
         }
 
-        public bool IsPageLoaded()
+        
+           public bool IsPageLoaded()
+{
+    By[] possibleMainContainers =
+    {
+        By.TagName("main"),
+        By.Id("content"),
+        By.CssSelector(".container"),
+        By.Id("root")
+    };
+
+    foreach (var locator in possibleMainContainers)
+    {
+        if (IsElementVisible(locator, 10))
         {
-            return IsElementVisible(_mainContent, 15);
+            return true;
+        }
+    }
+
+    return false;
+
         }
 
         public new string GetPageTitle()
@@ -50,10 +75,15 @@ namespace WebDriverAutomationFramework.Pages
             return IsElementVisible(_navigationMenu, 5);
         }
 
-        public bool IsMainContentVisible()
-        {
-            return IsElementVisible(_mainContent, 10);
-        }
+    
+            public bool IsMainContentVisible()
+{
+    bool result = IsElementVisible(_mainContent, 10);
+    Console.WriteLine($"[DEBUG] Selector {_mainContent} visible = {result}, URL = {Driver.Url}");
+    return result;
+}
+           // return IsElementVisible(_mainContent, 10);
+        
 
         public bool IsFooterVisible()
         {
@@ -74,6 +104,7 @@ namespace WebDriverAutomationFramework.Pages
             if (IsElementVisible(_submitButton, 5))
             {
                 WaitAndClick(_submitButton);
+                WaitForLoadingToComplete();
             }
         }
 
@@ -81,6 +112,7 @@ namespace WebDriverAutomationFramework.Pages
         {
             return IsElementVisible(_successMessage, 10);
         }
+
 
         public bool IsErrorMessageDisplayed()
         {
@@ -107,20 +139,38 @@ namespace WebDriverAutomationFramework.Pages
 
         public bool IsLoadingIndicatorVisible()
         {
-            return IsElementVisible(_loadingIndicator, 2);
+            try
+            {
+                return GetWait(2).Until(ExpectedConditions.ElementIsVisible(_loadingIndicator)).Displayed;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
         }
 
-        public void WaitForLoadingToComplete()
+        public void WaitForLoadingToComplete(int timeoutSeconds = 30)
         {
-            // Wait for loading indicator to disappear
-            var maxWaitTime = 30;
-            var waitTime = 0;
-            
-            while (IsLoadingIndicatorVisible() && waitTime < maxWaitTime)
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
+            wait.Until(driver =>
             {
-                Thread.Sleep(1000);
-                waitTime++;
-            }
+                try
+                {
+                    return !driver.FindElement(_loadingIndicator).Displayed;
+                }
+                catch (NoSuchElementException)
+                {
+                    return true; // El loader no existe → ya cargó
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return true; // Se eliminó el loader del DOM
+                }
+            });
         }
     }
 }

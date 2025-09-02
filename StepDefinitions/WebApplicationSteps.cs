@@ -18,10 +18,9 @@ namespace WebDriverAutomationFramework.StepDefinitions
         }
 
         [Given(@"the web application is running")]
-        public void GivenTheWebApplicationIsRunning()
+        public static void GivenTheWebApplicationIsRunning()
         {
-            // This step assumes the application is accessible
-            // In a real scenario, you might want to check if the server is running
+            // This step assumes the application running a real scenario server is running
             Console.WriteLine("Assuming web application is running and accessible");
         }
 
@@ -41,8 +40,9 @@ namespace WebDriverAutomationFramework.StepDefinitions
         [When(@"the page loads completely")]
         public void WhenThePageLoadsCompletely()
         {
-          /*  _homePage.WaitForLoadingToComplete();
-            _homePage.IsPageLoaded().Should().BeTrue("Page should load completely");*/
+               _homePage.WaitForLoadingToComplete();
+               _homePage.IsPageLoaded().Should().BeTrue("Page should load completely");
+                        
         }
 
         [When(@"I fill the input field with ""(.*)""")]
