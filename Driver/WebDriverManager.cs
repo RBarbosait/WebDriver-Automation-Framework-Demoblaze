@@ -41,7 +41,7 @@ namespace WebDriverAutomationFramework.Driver
         private static IWebDriver CreateChromeDriver()
         {
             var driverManager = new WDM.DriverManager();
-            driverManager.SetUpDriver(new ChromeConfig(), "LATEST");
+            driverManager.SetUpDriver(new ChromeConfig());
             
             var options = new ChromeOptions();
             
@@ -66,7 +66,7 @@ namespace WebDriverAutomationFramework.Driver
 
         private static IWebDriver CreateFirefoxDriver()
         {
-            new WDM.DriverManager().SetUpDriver(new FirefoxConfig(), "LATEST");
+            new WDM.DriverManager().SetUpDriver(new FirefoxConfig());
             
             var options = new FirefoxOptions();
             
@@ -80,7 +80,7 @@ namespace WebDriverAutomationFramework.Driver
 
         private static IWebDriver CreateEdgeDriver()
         {
-            new WDM.DriverManager().SetUpDriver(new EdgeConfig(), "LATEST");
+            new WDM.DriverManager().SetUpDriver(new EdgeConfig());
             
             var options = new EdgeOptions();
             
