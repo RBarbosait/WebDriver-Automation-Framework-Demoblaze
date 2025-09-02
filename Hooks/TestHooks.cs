@@ -7,19 +7,17 @@ namespace WebDriverAutomationFramework.Hooks
     public class TestHooks
     {
         private readonly ScenarioContext _scenarioContext;
-        private readonly DriverManager _webDriverManager;
 
         public TestHooks(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
-            _webDriverManager = new DriverManager();
         }
 
         [BeforeScenario]
         public void BeforeScenario()
         {
             Console.WriteLine($"Starting scenario: {_scenarioContext.ScenarioInfo.Title}");
-            _webDriverManager.InitializeDriver();
+            DriverManager.InitializeDriver();
         }
 
         [AfterScenario]
@@ -28,11 +26,11 @@ namespace WebDriverAutomationFramework.Hooks
             if (_scenarioContext.TestError != null)
             {
                 Console.WriteLine($"Scenario failed: {_scenarioContext.TestError.Message}");
-                _webDriverManager.TakeScreenshot(_scenarioContext.ScenarioInfo.Title);
+                DriverManager.TakeScreenshot(_scenarioContext.ScenarioInfo.Title);
             }
 
             Console.WriteLine($"Completed scenario: {_scenarioContext.ScenarioInfo.Title}");
-            _webDriverManager.QuitDriver();
+            DriverManager.QuitDriver();
         }
 
         [BeforeFeature]

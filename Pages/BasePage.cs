@@ -6,8 +6,7 @@ namespace WebDriverAutomationFramework.Pages
 {
     public abstract class BasePage
     {
-        private static readonly DriverManager _webDriverManager = new DriverManager();
-        protected IWebDriver Driver => _webDriverManager.GetDriver();
+        protected IWebDriver Driver => DriverManager.GetDriver();
 
         protected void NavigateToUrl(string url)
         {
