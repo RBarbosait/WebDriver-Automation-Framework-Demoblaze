@@ -40,7 +40,8 @@ namespace WebDriverAutomationFramework.Driver
 
         private static IWebDriver CreateChromeDriver()
         {
-            new WDM.DriverManager().SetUpDriver(new ChromeConfig());
+            var driverManager = new WDM.DriverManager();
+            driverManager.SetUpDriver(new ChromeConfig(), "LATEST");
             
             var options = new ChromeOptions();
             
@@ -56,7 +57,8 @@ namespace WebDriverAutomationFramework.Driver
                 "--window-size=1920,1080",
                 "--disable-extensions",
                 "--disable-web-security",
-                "--allow-running-insecure-content"
+                "--allow-running-insecure-content",
+                "--remote-debugging-port=9222"
             );
 
             return new ChromeDriver(options);
@@ -64,7 +66,7 @@ namespace WebDriverAutomationFramework.Driver
 
         private static IWebDriver CreateFirefoxDriver()
         {
-            new WDM.DriverManager().SetUpDriver(new FirefoxConfig());
+            new WDM.DriverManager().SetUpDriver(new FirefoxConfig(), "LATEST");
             
             var options = new FirefoxOptions();
             
@@ -78,7 +80,7 @@ namespace WebDriverAutomationFramework.Driver
 
         private static IWebDriver CreateEdgeDriver()
         {
-            new WDM.DriverManager().SetUpDriver(new EdgeConfig());
+            new WDM.DriverManager().SetUpDriver(new EdgeConfig(), "LATEST");
             
             var options = new EdgeOptions();
             
