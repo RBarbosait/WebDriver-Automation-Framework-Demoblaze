@@ -1,12 +1,12 @@
 using OpenQA.Selenium;
-using WebDriverAutomationFramework.Driver;
+using DriverManager = WebDriverAutomationFramework.Driver.WebDriverManager;
 using WebDriverAutomationFramework.Utils;
 
 namespace WebDriverAutomationFramework.Pages
 {
     public abstract class BasePage
     {
-        private static readonly WebDriverManager _webDriverManager = new WebDriverManager();
+        private static readonly DriverManager _webDriverManager = new DriverManager();
         protected IWebDriver Driver => _webDriverManager.GetDriver();
 
         protected void NavigateToUrl(string url)

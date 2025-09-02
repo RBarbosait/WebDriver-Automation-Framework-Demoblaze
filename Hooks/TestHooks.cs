@@ -1,5 +1,5 @@
 using TechTalk.SpecFlow;
-using WebDriverAutomationFramework.Driver;
+using DriverManager = WebDriverAutomationFramework.Driver.WebDriverManager;
 
 namespace WebDriverAutomationFramework.Hooks
 {
@@ -7,12 +7,12 @@ namespace WebDriverAutomationFramework.Hooks
     public class TestHooks
     {
         private readonly ScenarioContext _scenarioContext;
-        private readonly WebDriverManager _webDriverManager;
+        private readonly DriverManager _webDriverManager;
 
         public TestHooks(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
-            _webDriverManager = new WebDriverManager();
+            _webDriverManager = new DriverManager();
         }
 
         [BeforeScenario]
