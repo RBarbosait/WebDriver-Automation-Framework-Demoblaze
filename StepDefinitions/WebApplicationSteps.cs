@@ -1,10 +1,18 @@
-using TechTalk.SpecFlow;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
+using Newtonsoft.Json.Linq;
+using OpenQA.Selenium;
+using TechTalk.SpecFlow;
 using WebDriverAutomationFramework.Pages;
-using WebDriverAutomationFramework.Driver;
 
 namespace WebDriverAutomationFramework.StepDefinitions
 {
+
     [Binding]
     public class WebApplicationSteps
     {
@@ -16,7 +24,7 @@ namespace WebDriverAutomationFramework.StepDefinitions
             _scenarioContext = scenarioContext;
             _homePage = new HomePage();
         }
-        
+
         [When(@"I fill the input field with ""(.*)""")]
         public void WhenIFillTheInputFieldWith(string text)
         {
@@ -34,39 +42,29 @@ namespace WebDriverAutomationFramework.StepDefinitions
         [Given(@"I am on the home page")]
         public void GivenIAmOnTheHomePage()
         {
-            _homePage.NavigateToHomePage();
+            _homePage.NavigateToLocalHomePage();
             _homePage.IsPageLoaded().Should().BeTrue("Home page should load successfully");
         }
 
         [When(@"I navigate to the home page")]
         public void WhenINavigateToTheHomePage()
         {
-            _homePage.NavigateToHomePage();
+            _homePage.NavigateToLocalHomePage();
         }
 
         [When(@"the page loads completely")]
         public void WhenThePageLoadsCompletely()
         {
-               _homePage.WaitForLoadingToComplete();
-               _homePage.IsPageLoaded().Should().BeTrue("Page should load completely");
-                        
+            // _homePage.WaitForLoadingToComplete();
+            _homePage.IsPageLoaded().Should().BeTrue("Page should load completely");
+
         }
 
-        [Then(@"the client list table should be visible")]
-        public void ThenTheClientListTableShouldBeVisible()
-        {
-            _homePage.IsClientTableVisible()
-                .Should().BeTrue("Client list table should be visible after login");
-        }
-
-
-        [When(@"I identify myself as ""(.*)""")]
-        public void WhenIIdentifyMyselfAs(string user)
-        {
-            _homePage.IdentifyUserAndWaitForClientTable(user)
-                .Should().BeTrue($"Client list table should be visible after login with {user}");
-        }
-
+        /* [When(@"I fill the input field with ""(.*)""")]
+         public void WhenIFillTheInputFieldWith(string text)
+         {
+             _homePage.FillInputField(text);
+         }*/
 
         [When(@"I click the submit button")]
         public void WhenIClickTheSubmitButton()
@@ -74,110 +72,87 @@ namespace WebDriverAutomationFramework.StepDefinitions
             _homePage.ClickSubmitButton();
         }
 
-        [Then(@"the page should load completely")]
-        public void ThenThePageShouldLoadCompletely()
+        [Then(@"the client list table should be visible")]
+        public void ThenTheClientListTableShouldBeVisible()
         {
-            _homePage.IsPageLoaded().Should().BeTrue("Page should load completely");
+            _homePage.IsClientTableVisible().Should().BeTrue("Client list table should be visible after login");
         }
 
-        [Then(@"the main content should be visible")]
-        public void ThenTheMainContentShouldBeVisible()
+        [Then(@"the client table ""Size"" column values should match employee counts")]
+        public void ThenTheClientTableSizeColumnValuesShouldMatchEmployeeCounts()
         {
-            _homePage.IsMainContentVisible().Should().BeTrue("Main content should be visible");
-        }
+            var rows = _homePage.GetClientTableRows();
 
-        [Then(@"the page title should be displayed")]
-        public void ThenThePageTitleShouldBeDisplayed()
-        {
-            var title = _homePage.GetPageTitle();
-            title.Should().NotBeNullOrEmpty("Page should have a title");
-            Console.WriteLine($"Page title: {title}");
-        }
-
-        [Then(@"the navigation menu should be visible")]
-        public void ThenTheNavigationMenuShouldBeVisible()
-        {
-            _homePage.IsNavigationVisible().Should().BeTrue("Navigation menu should be visible");
-        }
-
-        [Then(@"the main content area should be displayed")]
-        public void ThenTheMainContentAreaShouldBeDisplayed()
-        {
-            _homePage.IsMainContentVisible().Should().BeTrue("Main content area should be displayed");
-        }
-
-        [Then(@"the footer should be visible at the bottom")]
-        public void ThenTheFooterShouldBeVisibleAtTheBottom()
-        {
-            _homePage.IsFooterVisible().Should().BeTrue("Footer should be visible");
-        }
-
-        [Then(@"the page should have a valid title")]
-        public void ThenThePageShouldHaveAValidTitle()
-        {
-            var pageTitle = _homePage.GetPageTitle();
-            var browserTitle = _homePage.GetPageTitle();
-            
-            pageTitle.Should().NotBeNullOrEmpty("Page should have a valid title");
-            browserTitle.Should().NotBeNullOrEmpty("Browser title should not be empty");
-            
-            Console.WriteLine($"Page title: {pageTitle}");
-            Console.WriteLine($"Browser title: {browserTitle}");
-        }
-
-        [Then(@"I should see a response within (.*) seconds")]
-        public void ThenIShouldSeeAResponseWithinSeconds(int timeoutSeconds)
-        {
-            var startTime = DateTime.Now;
-            var timeout = TimeSpan.FromSeconds(timeoutSeconds);
-            var responseReceived = false;
-
-            while (DateTime.Now - startTime < timeout && !responseReceived)
+            int rowIndex = 0;
+            foreach (var row in rows)
             {
-                if (_homePage.IsSuccessMessageDisplayed() || _homePage.IsErrorMessageDisplayed())
+                rowIndex++;
+
+                var nameText = row.FindElement(By.CssSelector("td:nth-child(1)")).Text.Trim(); // columna Name
+                var employeesText = row.FindElement(By.CssSelector("td:nth-child(2)")).Text.Trim(); // columna Employees
+                var sizeText = row.FindElement(By.CssSelector("td:nth-child(3)")).Text.Trim(); // columna Size
+
+                if (!int.TryParse(employeesText, out int employees))
                 {
-                    responseReceived = true;
-                    break;
+                    throw new Exception($"[ERROR] No se pudo parsear Employees en fila {rowIndex} (Cliente={nameText}): '{employeesText}'");
                 }
-                
-                Thread.Sleep(1000);
-            }
 
-            if (!responseReceived)
-            {
-                // If no specific success/error message, check if page state changed
-                responseReceived = true; // Assume form submission completed
-                Console.WriteLine("Form submission completed (no specific response message found)");
-            }
+                // Nueva lógica de negocio
+                string expectedSize = employees switch
+                {
+                    <= 100 => "Small",
+                    >= 101 and <= 999 => "Medium",
+                    _ => "Big"
+                };
 
-            responseReceived.Should().BeTrue($"Should receive a response within {timeoutSeconds} seconds");
+                try
+                {
+                    sizeText.Should().Be(expectedSize,
+                        $"Employee count {employees} debería corresponder con Size '{expectedSize}' según la regla de negocio");
+                    Console.WriteLine($"[OK] Row={rowIndex}, Client={nameText}, Employees={employees}, Size={sizeText}, Expected={expectedSize}");
+                }
+                catch (Exception)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[FAIL] Row={rowIndex}, Client={nameText}, Employees={employees}, Size from UI='{sizeText}', Expected='{expectedSize}'");
+                    Console.ResetColor();
+                    throw;
+                }
+            }
         }
 
-        [Then(@"the form interaction should be completed")]
-        public void ThenTheFormInteractionShouldBeCompleted()
-        {
-            // Check for success message, error message, or any indication of form processing
-            var hasSuccessMessage = _homePage.IsSuccessMessageDisplayed();
-            var hasErrorMessage = _homePage.IsErrorMessageDisplayed();
+                
+        
+    
             
-            if (hasSuccessMessage)
-            {
-                var successMessage = _homePage.GetSuccessMessage();
-                Console.WriteLine($"Success message: {successMessage}");
-            }
-            else if (hasErrorMessage)
-            {
-                var errorMessage = _homePage.GetErrorMessage();
-                Console.WriteLine($"Error message: {errorMessage}");
-            }
-            else
-            {
-                Console.WriteLine("Form interaction completed (no specific message displayed)");
-            }
+        
 
-            // The form interaction is considered completed if we reach this point
-            // In a real application, you would have more specific assertions
-            true.Should().BeTrue("Form interaction should be completed");
+
+
+
+
+        [Then(@"the client names in the table should match the backend response")]
+        public async Task ThenTheClientNamesInTheTableShouldMatchBackendResponse()
+        {
+            // 1️⃣ Nombres de la UI
+            var uiClientNames = _homePage.GetClientNamesFromTable();
+
+            // 2️⃣ Request al backend
+            using var client = new HttpClient();
+            var requestBody = new StringContent("{}", Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("http://localhost:3001/", requestBody);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var customers = JObject.Parse(jsonResponse)["customers"];
+
+            var backendClientNames = customers.Select(c => c["name"].ToString()).ToList();
+
+            Console.WriteLine("[DEBUG] Client names from backend: " + string.Join(", ", backendClientNames));
+
+            // 3️⃣ Comparación
+            uiClientNames.Should().BeEquivalentTo(backendClientNames, options => options.WithStrictOrdering(),
+                "The client names displayed in the UI should match the backend response");
         }
     }
 }

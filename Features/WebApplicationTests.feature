@@ -13,17 +13,31 @@ Scenario: Verify client list displayed after system identification
     And the main content should be visible
     When I fill the input field with "test@example.com"
     And I click the submit button
-    Then the client list table should be visible
+    Then the client list table should be visible and the identified user should match "test@example.com"
     And the page title should be displayed
 
 @functional @regression
 Scenario: Verify page navigation and elements
     Given I am on the home page
     When the page loads completely
-    Then the navigation menu should be visible
-    And the main content area should be displayed
-    And the footer should be visible at the bottom
-    And the page should have a valid title
+    When I fill the input field with "test@example.com"
+    And I click the submit button
+    Then the client list table should be visible
+    And the client names in the table should match the backend response
+
+@functional2 @regression
+Scenario: Verify client size classification matches employees count - business size rule
+    Given I am on the home page
+    When the page loads completely
+    When I fill the input field with "test@example.com"
+    And I click the submit button
+    Then the client list table should be visible
+    And the client table "Size" column values should match employee counts 
+        # the client table Size column value should correspond with the # of Employees applying the business rule:
+        # 0–100 → Small
+        # 101–999 → Medium
+        # ≥1000 → Big
+
 
 @form @regression
 Scenario Outline: Verify form interaction functionality
