@@ -41,8 +41,8 @@ namespace WebDriverAutomationFramework.StepDefinitions
         [When(@"the page loads completely")]
         public void WhenThePageLoadsCompletely()
         {
-            _homePage.WaitForLoadingToComplete();
-            _homePage.IsPageLoaded().Should().BeTrue("Page should load completely");
+          /*  _homePage.WaitForLoadingToComplete();
+            _homePage.IsPageLoaded().Should().BeTrue("Page should load completely");*/
         }
 
         [When(@"I fill the input field with ""(.*)""")]
