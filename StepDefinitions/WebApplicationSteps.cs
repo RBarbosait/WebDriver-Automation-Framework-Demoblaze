@@ -16,6 +16,13 @@ namespace WebDriverAutomationFramework.StepDefinitions
             _scenarioContext = scenarioContext;
             _homePage = new HomePage();
         }
+        
+        [When(@"I fill the input field with ""(.*)""")]
+        public void WhenIFillTheInputFieldWith(string text)
+        {
+            _homePage.FillInputField(text);
+        }
+
 
         [Given(@"the web application is running")]
         public static void GivenTheWebApplicationIsRunning()
@@ -45,12 +52,21 @@ namespace WebDriverAutomationFramework.StepDefinitions
                         
         }
 
-        [When(@"I fill the input field with ""(.*)""")]
-        public void WhenIFillTheInputFieldWith(string inputText)
+        [Then(@"the client list table should be visible")]
+        public void ThenTheClientListTableShouldBeVisible()
         {
-            _homePage.FillInputField(inputText);
-            _scenarioContext["InputText"] = inputText;
+            _homePage.IsClientTableVisible()
+                .Should().BeTrue("Client list table should be visible after login");
         }
+
+
+        [When(@"I identify myself as ""(.*)""")]
+        public void WhenIIdentifyMyselfAs(string user)
+        {
+            _homePage.IdentifyUserAndWaitForClientTable(user)
+                .Should().BeTrue($"Client list table should be visible after login with {user}");
+        }
+
 
         [When(@"I click the submit button")]
         public void WhenIClickTheSubmitButton()

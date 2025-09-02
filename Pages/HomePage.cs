@@ -17,9 +17,17 @@ namespace WebDriverAutomationFramework.Pages
         private readonly By _footer = By.TagName("footer");
         private readonly By _loadingIndicator = By.CssSelector(".loading, .spinner");
 
+        //tabla clientes
+
+        //private readonly By _clientTable = By.CssSelector("table#clients, .clients-table");
+        private readonly By _clientTable = By.CssSelector("#root > div > div > div > div > table");
+
+
         // Form elements
         private readonly By _inputField = By.CssSelector("input[type='text'], input[type='email']");
-        private readonly By _submitButton = By.CssSelector("button[type='submit'], .submit-btn");
+        // private readonly By _submitButton = By.CssSelector("button[type='submit'], .submit-btn");
+        private readonly By _submitButton = By.XPath("//*[@id='root']//input[@type='button']");
+
         private readonly By _successMessage = By.CssSelector(".success, .alert-success");
         private readonly By _errorMessage = By.CssSelector(".error, .alert-error");
 
@@ -38,27 +46,45 @@ namespace WebDriverAutomationFramework.Pages
             WaitForLoadingToComplete();
         }
 
-        
-           public bool IsPageLoaded()
-{
-    By[] possibleMainContainers =
-    {
-        By.TagName("main"),
-        By.Id("content"),
-        By.CssSelector(".container"),
-        By.Id("root")
-    };
-
-    foreach (var locator in possibleMainContainers)
-    {
-        if (IsElementVisible(locator, 10))
+        public bool IsClientTableVisible()
         {
-            return true;
+            return IsElementVisible(_clientTable, 15);
         }
-    }
+       
+           public bool IsPageLoaded(){
+            /* By[] possibleMainContainers =
+             {
+                 By.TagName("main"),
+                 By.Id("content"),
+                 By.CssSelector(".container"),
+                 By.Id("root")
+             };
 
-    return false;
+             foreach (var locator in possibleMainContainers)
+             {
+                 if (IsElementVisible(locator, 10))
+                 {
+                     return true;
+                 }
+             }*/
 
+            return IsElementVisible(_mainContent, 15);
+
+        }
+
+        public void ClickSubmitButton()
+        {
+            Console.WriteLine("[DEBUG] Trying to click submit button...");
+            if (IsElementVisible(_submitButton, 5))
+            {
+                WaitAndClick(_submitButton);
+                Console.WriteLine("[DEBUG] Clicked submit button OK");
+                WaitForLoadingToComplete();
+            }
+            else
+            {
+                Console.WriteLine("[DEBUG] Submit button not found with selector");
+            }
         }
 
         public new string GetPageTitle()
@@ -75,13 +101,22 @@ namespace WebDriverAutomationFramework.Pages
             return IsElementVisible(_navigationMenu, 5);
         }
 
+       //resumi flujo input click verify
+        public bool IdentifyUserAndWaitForClientTable(string user)
+        {
+            FillInputField(user);
+            ClickSubmitButton();
+            return IsClientTableVisible();
+        }
+
+
     
             public bool IsMainContentVisible()
-{
-    bool result = IsElementVisible(_mainContent, 10);
-    Console.WriteLine($"[DEBUG] Selector {_mainContent} visible = {result}, URL = {Driver.Url}");
-    return result;
-}
+        {
+            bool result = IsElementVisible(_mainContent, 10);
+            Console.WriteLine($"[DEBUG] Selector {_mainContent} visible = {result}, URL = {Driver.Url}");
+            return result;
+        }
            // return IsElementVisible(_mainContent, 10);
         
 
@@ -99,14 +134,14 @@ namespace WebDriverAutomationFramework.Pages
             }
         }
 
-        public void ClickSubmitButton()
+        /*public void ClickSubmitButton()
         {
             if (IsElementVisible(_submitButton, 5))
             {
                 WaitAndClick(_submitButton);
                 WaitForLoadingToComplete();
             }
-        }
+        }*/
 
         public bool IsSuccessMessageDisplayed()
         {

@@ -7,10 +7,13 @@ Background:
     Given the web application is running
 
 @smoke @regression
-Scenario: Verify home page loads successfully
+Scenario: Verify client list displayed after system identification
     When I navigate to the home page
     Then the page should load completely
     And the main content should be visible
+    When I fill the input field with "test@example.com"
+    And I click the submit button
+    Then the client list table should be visible
     And the page title should be displayed
 
 @functional @regression
