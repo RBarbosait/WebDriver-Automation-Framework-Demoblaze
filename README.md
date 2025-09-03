@@ -87,7 +87,7 @@ Smoke test – checks that form submission returns a 200 OK status.
 📂 Project Structure
 ```bash
 graphql
-```
+
 WebDriver-Automation-Framework-with-C-and-SpecFlow-d6/
 ├── Config/
 │   └── TestConfiguration.cs      # Centralized configuration
@@ -107,6 +107,7 @@ WebDriver-Automation-Framework-with-C-and-SpecFlow-d6/
 ├── appsettings.json              # Application configuration
 ├── specflow.json                 # SpecFlow configuration
 └── WebDriverAutomationFramework.csproj
+```
 
 🛠️ Tech Stack
 
