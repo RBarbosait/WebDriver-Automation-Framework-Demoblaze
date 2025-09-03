@@ -146,6 +146,47 @@ namespace WebDriverAutomationFramework.Pages
             WaitForPageToLoad(10);
         }
 
+        public void ClickSubmitButton(bool expectAlert = false)
+        {
+            Console.WriteLine("[DEBUG] Trying to click submit button...");
+            if (IsElementVisible(_submitButton, 5))
+            {
+                WaitAndClick(_submitButton);
+                Console.WriteLine("[DEBUG] Clicked submit button OK");
+
+                if (!expectAlert)
+                {
+                    WaitForLoadingToComplete();
+                }
+            }
+        }
+
+     
+        /// <summary>
+        /// Espera que la página esté completamente cargada
+        /// </summary>
+        public void WaitForLoadingToComplete(int timeoutSeconds = 10)
+        {
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
+            wait.PollingInterval = TimeSpan.FromMilliseconds(200);
+            wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(StaleElementReferenceException));
+
+            wait.Until(driver =>
+            {
+                try
+                {
+                    var loader = driver.FindElement(_loadingIndicator);
+                    return !loader.Displayed;
+                }
+                catch
+                {
+                    return true; // Si no existe, ya cargó
+                }
+            });
+        }
+
+
+
         /// <summary>
         /// Combina flujo input + submit + espera tabla clientes
         /// </summary>
@@ -237,5 +278,14 @@ namespace WebDriverAutomationFramework.Pages
             try { return GetWait(2).Until(ExpectedConditions.ElementIsVisible(_loadingIndicator)).Displayed; }
             catch { return false; }
         }
+
+        /// <summary>
+        /// Devuelve el WebDriver actual (para steps que necesitan esperar alerts)
+        /// </summary>
+        public IWebDriver GetWebDriver()
+        {
+            return Driver;
+        }
+
     }
 }

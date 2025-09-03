@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
-using OpenQA.Selenium;
 using TechTalk.SpecFlow;
 using WebDriverAutomationFramework.Pages;
 
@@ -52,6 +49,7 @@ namespace WebDriverAutomationFramework.StepDefinitions
             _homePage.NavigateToLocalHomePage();
         }
 
+        
         [When(@"the page loads completely")]
         public void WhenThePageLoadsCompletely()
         {
@@ -60,23 +58,80 @@ namespace WebDriverAutomationFramework.StepDefinitions
 
         }
 
+        [Then(@"the page should load completely")]
+        public void ThenThePageShouldLoadCompletely()
+        {
+            // _homePage.WaitForLoadingToComplete();
+            _homePage.IsPageLoaded().Should().BeTrue("Page should load completely");
+
+        }
+
+        [Then(@"the main content should be visible")]
+        public void ThenTheMainContentShouldBeVisible()
+        {
+            bool isVisible = _homePage.IsMainContentVisible();
+            isVisible.Should().BeTrue("the main content area must be displayed");
+        }
+
+        [When(@"I leave the input field empty")]
+        public void WhenILeaveTheInputFieldEmpty()
+        {
+            // Aseguramos limpiar el campo si tiene algo
+            _homePage.FillInputField(""); 
+        }
+
         /* [When(@"I fill the input field with ""(.*)""")]
          public void WhenIFillTheInputFieldWith(string text)
          {
              _homePage.FillInputField(text);
          }*/
 
+
+
+        //click submit standard:
+
         [When(@"I click the submit button")]
         public void WhenIClickTheSubmitButton()
         {
             _homePage.ClickSubmitButton();
         }
+        // click submit negative alert:
+        [When(@"I click the submit button expecting an alert")]
+        public void WhenIClickTheSubmitButtonExpectingAlert()
+        {
+            // Para el escenario con input vacío
+            _homePage.ClickSubmitButton(expectAlert: true);
+        }
+
 
         [Then(@"the client list table should be visible")]
         public void ThenTheClientListTableShouldBeVisible()
         {
             _homePage.IsClientTableVisible().Should().BeTrue("Client list table should be visible after login");
         }
+
+        
+        [Then(@"the client list table should be visible and the identified user should match ""(.*)""")]
+        public void ThenTheClientListTableShouldBeVisibleAndTheIdentifiedUserShouldMatch(string expectedUser)
+        {
+            // 1. Verificar que la tabla de clientes es visible
+            bool isTableVisible = _homePage.IsClientTableVisible();
+            isTableVisible.Should().BeTrue("Client list table should be visible after login");
+
+            // 2. Verificar que el usuario identificado coincide
+            bool userMatches = _homePage.DoesIdentifiedUserMatch(expectedUser);
+            userMatches.Should().BeTrue($"Identified user should match the expected value '{expectedUser}'");
+        }
+
+
+        [Then(@"the page title should be displayed")]
+        public void ThenThePageTitleShouldBeDisplayed()
+        {
+            string title = _homePage.GetPageTitle();
+            title.Should().NotBeNullOrEmpty("Page title should be displayed");
+            Console.WriteLine($"[DEBUG] Page title = '{title}'");
+        }
+
 
         [Then(@"the client table ""Size"" column values should match employee counts")]
         public void ThenTheClientTableSizeColumnValuesShouldMatchEmployeeCounts()
@@ -121,14 +176,27 @@ namespace WebDriverAutomationFramework.StepDefinitions
             }
         }
 
-                
-        
-    
-            
-        
+         [Then(@"an alert should be displayed with message ""(.*)""")]
+        public void ThenAnAlertShouldBeDisplayedWithMessage(string expectedMessage)
+        {
+            var wait = new WebDriverWait(_homePage.GetWebDriver(), TimeSpan.FromSeconds(5));
+            IAlert alert = wait.Until(ExpectedConditions.AlertIsPresent());
 
+            string alertText = alert.Text;
+            Console.WriteLine($"[DEBUG] Alert text: {alertText}");
 
+            alertText.Should().Be(expectedMessage, $"because alert should say '{expectedMessage}' when input is empty");
 
+            // Cerramos el alert
+            alert.Accept();
+        }
+
+      /*   [When(@"I leave the input field empty")]
+        public void WhenILeaveTheInputFieldEmpty()
+        {
+            // Aseguramos limpiar el campo si tiene algo
+            _homePage.FillInputField(""); 
+        }*/
 
 
         [Then(@"the client names in the table should match the backend response")]
@@ -154,5 +222,27 @@ namespace WebDriverAutomationFramework.StepDefinitions
             uiClientNames.Should().BeEquivalentTo(backendClientNames, options => options.WithStrictOrdering(),
                 "The client names displayed in the UI should match the backend response");
         }
+
+        //check the server response
+
+        [Then(@"the server response status code should be 200")]
+        public async Task ThenTheServerResponseStatusCodeShouldBe200()
+        {
+            using var client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:3001"); // backend URL
+
+            var requestBody = new { email = "test@example.com" }; // opcional: puedes parametrizar
+            var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(requestBody),
+                                            System.Text.Encoding.UTF8,
+                                            "application/json");
+
+            var response = await client.PostAsync("/", content);
+
+            int statusCode = (int)response.StatusCode;
+            Console.WriteLine($"[DEBUG] Backend response status code: {statusCode}");
+
+            statusCode.Should().Be(200, "the backend should respond with 200 OK on valid form submission");
+        }
+
     }
 }

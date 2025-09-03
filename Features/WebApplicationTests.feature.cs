@@ -84,16 +84,26 @@ namespace WebDriverAutomationFramework.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Verify client list displayed after system identification")]
-        [NUnit.Framework.CategoryAttribute("smoke")]
+        [NUnit.Framework.DescriptionAttribute("Verify client list displayed after system identification and welcome msg")]
+        [NUnit.Framework.CategoryAttribute("form")]
         [NUnit.Framework.CategoryAttribute("regression")]
-        public void VerifyClientListDisplayedAfterSystemIdentification()
+        [NUnit.Framework.CategoryAttribute("positive")]
+        [NUnit.Framework.TestCaseAttribute("test@example.com", null)]
+        [NUnit.Framework.TestCaseAttribute("Rodrigo Test", null)]
+        public void VerifyClientListDisplayedAfterSystemIdentificationAndWelcomeMsg(string input_Text, string[] exampleTags)
         {
-            string[] tagsOfScenario = new string[] {
-                    "smoke",
-                    "regression"};
+            string[] @__tags = new string[] {
+                    "form",
+                    "regression",
+                    "positive"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            string[] tagsOfScenario = @__tags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify client list displayed after system identification", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            argumentsOfScenario.Add("input_text", input_Text);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify client list displayed after system identification and welcome msg", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 10
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -117,14 +127,14 @@ this.FeatureBackground();
     testRunner.And("the main content should be visible", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
-    testRunner.When("I fill the input field with \"test@example.com\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When(string.Format("I fill the input field with \"{0}\"", input_Text), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 15
     testRunner.And("I click the submit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
-    testRunner.Then("the client list table should be visible and the identified user should match \"tes" +
-                        "t@example.com\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then(string.Format("the client list table should be visible and the identified user should match \"{0}" +
+                            "\"", input_Text), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 17
     testRunner.And("the page title should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -134,17 +144,19 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Verify page navigation and elements")]
-        [NUnit.Framework.CategoryAttribute("functional")]
+        [NUnit.Framework.DescriptionAttribute("Verify alert message when input is left empty")]
+        [NUnit.Framework.CategoryAttribute("form")]
         [NUnit.Framework.CategoryAttribute("regression")]
-        public void VerifyPageNavigationAndElements()
+        [NUnit.Framework.CategoryAttribute("negative")]
+        public void VerifyAlertMessageWhenInputIsLeftEmpty()
         {
             string[] tagsOfScenario = new string[] {
-                    "functional",
-                    "regression"};
+                    "form",
+                    "regression",
+                    "negative"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify page navigation and elements", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 20
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify alert message when input is left empty", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 25
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -157,22 +169,72 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line hidden
-#line 21
+#line 26
+    testRunner.When("I navigate to the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 27
+    testRunner.Then("the page should load completely", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 28
+    testRunner.And("the main content should be visible", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 29
+    testRunner.When("I leave the input field empty", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 30
+    testRunner.And("I click the submit button expecting an alert", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 31
+    testRunner.Then("an alert should be displayed with message \"Please provide your name\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Verify clients table display and client name data table content match backend res" +
+            "ponse")]
+        [NUnit.Framework.CategoryAttribute("functional0")]
+        [NUnit.Framework.CategoryAttribute("ClientListBackendVsFrontend")]
+        [NUnit.Framework.CategoryAttribute("regression")]
+        public void VerifyClientsTableDisplayAndClientNameDataTableContentMatchBackendResponse()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "functional0",
+                    "ClientListBackendVsFrontend",
+                    "regression"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify clients table display and client name data table content match backend res" +
+                    "ponse", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 34
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 6
+this.FeatureBackground();
+#line hidden
+#line 35
     testRunner.Given("I am on the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 22
+#line 36
     testRunner.When("the page loads completely", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 23
+#line 37
     testRunner.When("I fill the input field with \"test@example.com\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 24
+#line 38
     testRunner.And("I click the submit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 25
+#line 39
     testRunner.Then("the client list table should be visible", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 26
+#line 40
     testRunner.And("the client names in the table should match the backend response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -181,70 +243,17 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Verify client size classification matches employees count - business size rule")]
-        [NUnit.Framework.CategoryAttribute("functional2")]
+        [NUnit.Framework.CategoryAttribute("functional1")]
+        [NUnit.Framework.CategoryAttribute("ClientSizeBusinessRule")]
         [NUnit.Framework.CategoryAttribute("regression")]
         public void VerifyClientSizeClassificationMatchesEmployeesCount_BusinessSizeRule()
         {
             string[] tagsOfScenario = new string[] {
-                    "functional2",
+                    "functional1",
+                    "ClientSizeBusinessRule",
                     "regression"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify client size classification matches employees count - business size rule", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 29
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 6
-this.FeatureBackground();
-#line hidden
-#line 30
-    testRunner.Given("I am on the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 31
-    testRunner.When("the page loads completely", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 32
-    testRunner.When("I fill the input field with \"test@example.com\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 33
-    testRunner.And("I click the submit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 34
-    testRunner.Then("the client list table should be visible", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 35
-    testRunner.And("the client table \"Size\" column values should match employee counts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Verify form interaction functionality")]
-        [NUnit.Framework.CategoryAttribute("form")]
-        [NUnit.Framework.CategoryAttribute("regression")]
-        [NUnit.Framework.TestCaseAttribute("test@example.com", null)]
-        [NUnit.Framework.TestCaseAttribute("Hello World", null)]
-        [NUnit.Framework.TestCaseAttribute("123456789", null)]
-        public void VerifyFormInteractionFunctionality(string input_Text, string[] exampleTags)
-        {
-            string[] @__tags = new string[] {
-                    "form",
-                    "regression"};
-            if ((exampleTags != null))
-            {
-                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
-            }
-            string[] tagsOfScenario = @__tags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            argumentsOfScenario.Add("input_text", input_Text);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify form interaction functionality", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 43
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -262,16 +271,59 @@ this.FeatureBackground();
     testRunner.Given("I am on the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 45
-    testRunner.When(string.Format("I fill the input field with \"{0}\"", input_Text), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("the page loads completely", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 46
-    testRunner.And("I click the submit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.When("I fill the input field with \"test@example.com\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 47
-    testRunner.Then("I should see a response within 10 seconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.And("I click the submit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 48
-    testRunner.And("the form interaction should be completed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.Then("the client list table should be visible", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 49
+    testRunner.And("the client table \"Size\" column values should match employee counts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Verify form submission returns 200 OK")]
+        [NUnit.Framework.CategoryAttribute("smoke")]
+        [NUnit.Framework.CategoryAttribute("regression")]
+        public void VerifyFormSubmissionReturns200OK()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "smoke",
+                    "regression"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify form submission returns 200 OK", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 57
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 6
+this.FeatureBackground();
+#line hidden
+#line 58
+    testRunner.Given("I am on the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 59
+    testRunner.When("I fill the input field with \"test@example.com\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 60
+    testRunner.And("I click the submit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 61
+    testRunner.Then("the server response status code should be 200", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
