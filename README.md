@@ -1,150 +1,121 @@
-# WebDriver Automation Framework con C# y SpecFlow
+# Customer App – QA Automation Project
 
-Framework de automatización de pruebas utilizando Selenium WebDriver, C#, Page Object Model y SpecFlow (Cucumber para .NET).
+## 📖 Overview
+This project demonstrates **QA automation** for the [frontend-and-backend app](https://github.com/wlsf82/frontend-and-backend).
 
-## Características
+The application was selected because of its **clean UI and backend integration**, allowing the design of a realistic **QA Story**:
+- A user enters their name to access the system.
+- A **header** is displayed with the welcome message and date.
+- A **customer list** is shown, including name, number of employees, and size classification (Small, Medium, Big).
+- Each customer has a detail page with contact information.
 
-- **Selenium WebDriver** con C# (.NET 6.0)
-- **Page Object Model** para mantenibilidad del código
-- **SpecFlow/Cucumber** para BDD (Behavior Driven Development)
-- **Configuración flexible** para múltiples navegadores y entornos
-- **Screenshots automáticos** en caso de fallos
-- **Ejecución paralela** con WebDriver thread-safe
-- **3 tipos de tests**: Smoke, Functional y Form testing
+---
 
-## Instalación y Configuración
+## ⚙️ Project Setup
 
-### Prerrequisitos
-- .NET 6.0 SDK o superior
-- Visual Studio Code con extensión C# Dev Kit
-- Node.js (para la aplicación objetivo)
-- Git
-
-### 1. Clonar el Framework
-\`\`\`bash
-# <CHANGE> Actualizado para usar repositorio Git propio
-git clone [TU_REPOSITORIO_GIT_URL]
-cd WebDriverAutomationFramework
-\`\`\`
-
-### 2. Configurar la Aplicación Objetivo
-\`\`\`bash
-# En otra terminal, clonar el repositorio objetivo
+Clone the repository:
+```bash
 git clone https://github.com/wlsf82/frontend-and-backend.git
 cd frontend-and-backend
-
-# Instalar dependencias
+Frontend
+bash
+Copiar código
+cd frontend
 npm install
+npm start
+Backend
+bash
+Copiar código
+cd backend
+npm install
+npm start
+The app will now be available locally, serving both frontend and backend components.
 
-# Ejecutar backend (puerto 3001)
-npm run start:backend &
+🤖 QA Automation
+Automation scripts are implemented in C# with SpecFlow, Selenium WebDriver, NUnit, and FluentAssertions.
+They validate both UI flows and backend data consistency.
 
-# Ejecutar frontend (puerto 3000)  
-npm run start:frontend
-\`\`\`
+Clone and Setup
+bash
+Copiar código
+git clone https://github.com/RBarbosait/WebDriver-Automation-Framework-with-C-and-SpecFlow-d6
+cd WebDriver-Automation-Framework-with-C-and-SpecFlow-d6
+Install .NET
+Download and install from: https://dotnet.microsoft.com/es-es/
 
-### 3. Configurar el Framework
-\`\`\`bash
-# Volver a la carpeta del framework
-cd ../WebDriverAutomationFramework
+Add ChromeDriver
+bash
+Copiar código
+dotnet add package Selenium.WebDriver.ChromeDriver --version 139.0.7258.15400
+# (change to the correct version if needed)
+Build the Solution
+bash
+Copiar código
+dotnet restore WebDriver-Automation-Framework-with-C-and-SpecFlow-d6.sln
+dotnet build WebDriver-Automation-Framework-with-C-and-SpecFlow-d6.sln
+Run All Automated Tests
+bash
+Copiar código
+dotnet test WebDriverAutomationFramework.csproj
+Run Tests by Category
+You can filter and run specific categories of tests:
 
-# Restaurar dependencias NuGet
-dotnet restore
-
-# Compilar el proyecto
-dotnet build
-\`\`\`
-
-## Ejecución de Tests
-
-### Comandos Básicos
-\`\`\`bash
-# Ejecutar todos los tests
-dotnet test
-
-# Ejecutar con logging detallado
-dotnet test --logger "console;verbosity=detailed"
-
-# Ejecutar tests por categoría
+bash
+Copiar código
 dotnet test --filter "TestCategory=smoke"
 dotnet test --filter "TestCategory=functional"
 dotnet test --filter "TestCategory=form"
-\`\`\`
+Utils
+kill-chrome-processes.bat → closes all ChromeDriver processes.
 
-### Script de Ejecución Rápida
-\`\`\`bash
-# Windows
-run-tests.bat
+📋 Automated Test Cases
+Positive form submission – verifies header, welcome message, and client list load.
 
-# Linux/Mac
-chmod +x run-tests.sh && ./run-tests.sh
-\`\`\`
+Negative form submission – validates alert message when input is empty.
 
-## Estructura del Proyecto
+Client data validation – ensures UI customer data matches backend response.
 
-\`\`\`
+Business rules validation – confirms size classification rules (0–100 Small, 101–999 Medium, ≥1000 Big).
+
+Smoke test – checks that form submission returns a 200 OK status.
+
+📂 Project Structure
+graphql
+Copiar código
 WebDriverAutomationFramework/
 ├── Config/
-│   └── TestConfiguration.cs      # Configuración centralizada
+│   └── TestConfiguration.cs      # Centralized configuration
 ├── Driver/
-│   └── WebDriverManager.cs       # Gestión thread-safe del WebDriver
+│   └── WebDriverManager.cs       # Thread-safe WebDriver management
 ├── Features/
-│   └── WebApplicationTests.feature # Escenarios BDD en Gherkin
+│   └── WebApplicationTests.feature # BDD scenarios in Gherkin
 ├── Hooks/
-│   └── TestHooks.cs              # Setup/Teardown automático
+│   └── TestHooks.cs              # Automatic Setup/Teardown
 ├── Pages/
-│   ├── BasePage.cs               # Clase base para Page Objects
-│   └── HomePage.cs               # Page Object de la página principal
+│   ├── BasePage.cs               # Base class for Page Objects
+│   └── HomePage.cs               # Page Object for the home page
 ├── StepDefinitions/
-│   └── WebApplicationSteps.cs    # Implementación de pasos Cucumber
+│   └── WebApplicationSteps.cs    # Cucumber step implementations
 ├── Utils/
-│   └── WebElementExtensions.cs   # Extensiones personalizadas
-├── appsettings.json              # Configuración de la aplicación
-├── specflow.json                 # Configuración de SpecFlow
+│   └── WebElementExtensions.cs   # Custom extensions
+├── appsettings.json              # Application configuration
+├── specflow.json                 # SpecFlow configuration
 └── WebDriverAutomationFramework.csproj
-\`\`\`
+🛠️ Tech Stack
+Frontend & Backend: Node.js + npm
 
-## Configuración
+Automation:
 
-### appsettings.json
-\`\`\`json
-{
-  "TestSettings": {
-    "BaseUrl": "http://localhost:3000",
-    "Browser": "Chrome",
-    "RunHeadless": false,
-    "ImplicitWait": 10,
-    "PageLoadTimeout": 30
-  }
-}
-\`\`\`
+C#
 
-### Navegadores Soportados
-- Chrome (por defecto)
-- Firefox
-- Edge
+SpecFlow (Gherkin syntax)
 
-## Tests Implementados
+Selenium WebDriver
 
-### 1. Smoke Test
-Verificación básica de que la aplicación carga correctamente.
+NUnit
 
-### 2. Functional Test  
-Validación de elementos de navegación y estructura de la página.
+FluentAssertions
 
-### 3. Form Test
-Pruebas de interacción con formularios y elementos de entrada.
+Version control: Git
 
-## Extensibilidad
 
-### Agregar nuevos Page Objects
-\`\`\`csharp
-public class NewPage : BasePage
-{
-    private readonly By _newElement = By.Id("new-element");
-    
-    public void InteractWithNewElement()
-    {
-        WaitAndClick(_newElement);
-    }
-}
