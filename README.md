@@ -17,18 +17,21 @@ Clone the repository:
 ```bash
 git clone https://github.com/wlsf82/frontend-and-backend.git
 cd frontend-and-backend
+```
 
 Frontend:
 ```bash
 cd frontend
 npm install
 npm start
+```
 
 Backend:
 ```bash
 cd backend
 npm install
 npm start
+```
 
 The app will now be available locally, serving both frontend and backend components.
 
@@ -41,6 +44,7 @@ Clone and Setup:
 ```bash
 git clone https://github.com/RBarbosait/WebDriver-Automation-Framework-with-C-and-SpecFlow-d6
 cd WebDriver-Automation-Framework-with-C-and-SpecFlow-d6
+```
 
 Install .NET:
 Download and install from: https://dotnet.microsoft.com/es-es/
@@ -48,16 +52,19 @@ Download and install from: https://dotnet.microsoft.com/es-es/
 Add ChromeDriver:
 ```bash
 dotnet add package Selenium.WebDriver.ChromeDriver --version 139.0.7258.15400
-# (change to the correct version if needed)
+``` 
+*(change to the correct version if needed)
 
 Build the Solution:
 ```bash
 dotnet restore WebDriver-Automation-Framework-with-C-and-SpecFlow-d6.sln
 dotnet build WebDriver-Automation-Framework-with-C-and-SpecFlow-d6.sln
+```
 
 Run All Automated Tests:
 ```bash
 dotnet test WebDriverAutomationFramework.csproj
+```
 
 Run Tests by Category:
 You can filter and run specific categories of tests:
@@ -65,7 +72,7 @@ You can filter and run specific categories of tests:
 dotnet test --filter "TestCategory=smoke"
 dotnet test --filter "TestCategory=functional"
 dotnet test --filter "TestCategory=form"
-
+```
 Utils:
 kill-chrome-processes.bat → closes all ChromeDriver processes.
 
@@ -78,8 +85,9 @@ Business rules validation – confirms size classification rules (0–100 Small,
 Smoke test – checks that form submission returns a 200 OK status.
 
 📂 Project Structure
+```bash
 graphql
-
+```
 WebDriver-Automation-Framework-with-C-and-SpecFlow-d6/
 ├── Config/
 │   └── TestConfiguration.cs      # Centralized configuration
@@ -104,7 +112,7 @@ WebDriver-Automation-Framework-with-C-and-SpecFlow-d6/
 
 Frontend & Backend: Node.js + npm
 
-Automation:C#, SpecFlow (Gherkin syntax), Selenium WebDriver, NUnit, FluentAssertions
+Automation: C#, SpecFlow (Gherkin syntax), Selenium WebDriver, NUnit, FluentAssertions
 
 Version control: Git
 
