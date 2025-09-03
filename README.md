@@ -101,20 +101,11 @@ WebDriverAutomationFramework/
 ├── appsettings.json              # Application configuration
 ├── specflow.json                 # SpecFlow configuration
 └── WebDriverAutomationFramework.csproj
+
 🛠️ Tech Stack
 Frontend & Backend: Node.js + npm
 
-Automation:
-
-C#
-
-SpecFlow (Gherkin syntax)
-
-Selenium WebDriver
-
-NUnit
-
-FluentAssertions
+Automation:C#, SpecFlow (Gherkin syntax), Selenium WebDriver, NUnit, FluentAssertions
 
 Version control: Git
 
