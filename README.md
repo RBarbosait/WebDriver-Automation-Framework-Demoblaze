@@ -37,8 +37,8 @@ The app will now be available locally, serving both frontend and backend compone
 
 🤖 QA Automation
 
-Automation scripts are implemented in C# with SpecFlow, Selenium WebDriver, NUnit, and FluentAssertions.
-They validate both UI flows and backend data consistency.
+Automation scripts are implemented in C# using .NET, SpecFlow, Selenium WebDriver, NUnit, and FluentAssertions.
+The framework validates both UI flows and backend data consistency, and is compatible with CI/CD pipelines.
 
 Clone and Setup:
 ```bash
