@@ -1,52 +1,59 @@
 using OpenQA.Selenium;
-using DriverManager = WebDriverAutomationFramework.Driver.WebDriverManager;
-using WebDriverAutomationFramework.Utils;
+using OpenQA.Selenium.Support.UI;
+using System;
 
-namespace WebDriverAutomationFramework.Pages
+namespace WebDriver_Automation_Framework_Demoblaze.Pages
 {
-    public abstract class BasePage
+    public class BasePage
     {
-        protected IWebDriver Driver => DriverManager.GetDriver();
+        protected IWebDriver Driver;
 
-        protected void NavigateToUrl(string url)
+        public BasePage(IWebDriver driver)
         {
-            Driver.Navigate().GoToUrl(url);
+            Driver = driver;
         }
 
-        protected void WaitAndClick(By locator)
+        protected IWebElement WaitAndFindElement(By locator, int timeoutSeconds = 10)
         {
-            Driver.WaitAndClick(locator);
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
+            return wait.Until(d => d.FindElement(locator));
         }
 
-        protected void WaitAndSendKeys(By locator, string text)
+        protected void WaitAndClick(By locator, int timeoutSeconds = 10)
         {
-            Driver.WaitAndSendKeys(locator, text);
+            WaitAndFindElement(locator, timeoutSeconds).Click();
         }
 
-        protected string WaitAndGetText(By locator)
+        protected void WaitAndSendKeys(By locator, string text, int timeoutSeconds = 10)
         {
-            return Driver.WaitAndGetText(locator);
+            var element = WaitAndFindElement(locator, timeoutSeconds);
+            element.Clear();
+            element.SendKeys(text);
         }
 
-        protected bool IsElementVisible(By locator, int timeoutInSeconds = 10)
+        protected bool IsElementVisible(By locator, int timeoutSeconds = 5)
         {
-            return Driver.WaitForElementToBeVisible(locator, timeoutInSeconds);
+            try
+            {
+                var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
+                return wait.Until(d => d.FindElement(locator).Displayed);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         protected void ScrollToElement(By locator)
         {
-            var element = Driver.FindElement(locator);
-            Driver.ScrollToElement(element);
+            var element = WaitAndFindElement(locator);
+            ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
         }
 
-        public string GetPageTitle()
+        protected void WaitForPageLoad(int timeoutSeconds = 10)
         {
-            return Driver.Title;
-        }
-
-        public string GetCurrentUrl()
-        {
-            return Driver.Url;
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
+            wait.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
         }
     }
 }
