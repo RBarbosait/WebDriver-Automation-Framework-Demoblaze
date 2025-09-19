@@ -1,11 +1,14 @@
 using OpenQA.Selenium;
-using WebDriver_Automation_Framework_Demoblaze.Hooks;
+using OpenQA.Selenium.Support.UI;
+using WebDriverAutomationFramework.Hooks;
 
 namespace WebDriver_Automation_Framework_Demoblaze.Pages
 {
     public class CheckoutPage : BasePage
     {
-        public CheckoutPage() : base(Hooks.Hooks.Driver) { }
+        private readonly IWebDriver _driver;
+        private readonly WebDriverWait _wait;
+        public CheckoutPage() : base(WebDriverAutomationFramework.Hooks.Hooks.Driver) { }
 
         private By NameField => By.Id("name");
         private By CountryField => By.Id("country");
@@ -16,15 +19,26 @@ namespace WebDriver_Automation_Framework_Demoblaze.Pages
         private By PurchaseButton => By.CssSelector("button[onclick='purchaseOrder()']");
         private By ConfirmationMessage => By.CssSelector(".sweet-alert h2");
 
-        public void FillForm(string name, string country, string city, string card, string month, string year)
-        {
-            WaitAndSendKeys(NameField, name);
-            WaitAndSendKeys(CountryField, country);
-            WaitAndSendKeys(CityField, city);
-            WaitAndSendKeys(CardField, card);
-            WaitAndSendKeys(MonthField, month);
-            WaitAndSendKeys(YearField, year);
-        }
+        public void FillPurchaseForm(string name, string country, string city, string card, string month, string year)
+{
+    var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+
+    // 1️⃣ Clic en Place Order para abrir el modal
+    var placeOrderButton = wait.Until(drv => drv.FindElement(By.XPath("//*[@id='page-wrapper']/div/div[2]/button")));
+    placeOrderButton.Click();
+
+    // 2️⃣ Esperar a que el modal se muestre
+    var modal = wait.Until(drv => drv.FindElement(By.Id("orderModal")));
+    wait.Until(drv => modal.Displayed && modal.Enabled);
+
+    // 3️⃣ Llenar los campos del formulario dentro del modal
+    modal.FindElement(By.Id("name")).SendKeys(name);
+    modal.FindElement(By.Id("country")).SendKeys(country);
+    modal.FindElement(By.Id("city")).SendKeys(city);
+    modal.FindElement(By.Id("card")).SendKeys(card);
+    modal.FindElement(By.Id("month")).SendKeys(month);
+    modal.FindElement(By.Id("year")).SendKeys(year);
+}
 
         public void Purchase() => WaitAndClick(PurchaseButton);
 
