@@ -1,120 +1,116 @@
-# Customer App – QA Automation Project
+WebDriver Automation Framework – Demoblaze QA Project
+📖 Overview
 
-## 📖 Overview
-This project demonstrates **QA automation** for the [frontend-and-backend app](https://github.com/wlsf82/frontend-and-backend).
+This project demonstrates QA automation for the Demoblaze web application
+, a demo e-commerce platform.
 
-The application was selected because of its **clean UI and backend integration**, allowing the design of a realistic **QA Story**:
-- A user enters their name to access the system.
-- A **header** is displayed with the welcome message and date.
-- A **customer list** is shown, including name, number of employees, and size classification (Small, Medium, Big).
-- Each customer has a detail page with contact information.
+The automation validates realistic user scenarios including product selection, cart management, and purchase workflow:
 
----
+Navigate to the home page and browse products.
 
-## ⚙️ Project Setup
+Add one or more products to the shopping cart.
+
+Verify the cart contains the correct number of items.
+
+Complete the purchase form with valid data.
+
+Confirm the order and verify the success message.
+
+This ensures end-to-end UI and functional validation of the e-commerce flow.
+
+⚙️ Project Setup
 
 Clone the repository:
-```bash
-git clone https://github.com/wlsf82/frontend-and-backend.git
-cd frontend-and-backend
-```
 
-Frontend:
-```bash
-cd frontend
-npm install
-npm start
-```
+git clone https://github.com/RBarbosait/WebDriver-Automation-Framework-Demoblaze.git
+cd WebDriver-Automation-Framework-Demoblaze
 
-Backend:
-```bash
-cd backend
-npm install
-npm start
-```
 
-The app will now be available locally, serving both frontend and backend components.
-
-🤖 QA Automation
-
-Automation scripts are implemented in C# using .NET, SpecFlow, Selenium WebDriver, NUnit, and FluentAssertions.
-The framework validates both UI flows and backend data consistency, and is compatible with CI/CD pipelines.
-
-Clone and Setup:
-```bash
-git clone https://github.com/RBarbosait/WebDriver-Automation-Framework-with-C-and-SpecFlow-d6
-cd WebDriver-Automation-Framework-with-C-and-SpecFlow-d6
-```
-
-Install .NET:
-Download and install from: https://dotnet.microsoft.com/es-es/
+Install .NET (if not installed):
+https://dotnet.microsoft.com/es-es/download
 
 Add ChromeDriver:
-```bash
-dotnet add package Selenium.WebDriver.ChromeDriver --version 139.0.7258.15400
-``` 
-*(change to the correct version if needed)
 
-Build the Solution:
-```bash
-dotnet restore WebDriver-Automation-Framework-with-C-and-SpecFlow-d6.sln
-dotnet build WebDriver-Automation-Framework-with-C-and-SpecFlow-d6.sln
-```
+dotnet add package Selenium.WebDriver.ChromeDriver --version 139.0.7339.128
+
+
+(adjust version to match your local Chrome version)
+
+Restore and build the solution:
+
+dotnet restore WebDriverAutomationFramework.csproj
+dotnet build WebDriverAutomationFramework.csproj
+
 
 Run All Automated Tests:
-```bash
+
 dotnet test WebDriverAutomationFramework.csproj
-```
+
 
 Run Tests by Category:
-You can filter and run specific categories of tests:
-```bash
-dotnet test --filter "TestCategory=smoke"
-dotnet test --filter "TestCategory=functional"
+
 dotnet test --filter "TestCategory=form"
-```
-Utils:
-kill-chrome-processes.bat → closes all ChromeDriver processes.
+dotnet test --filter "TestCategory=smoke"
+dotnet test --filter "TestCategory=finalizar"
 
-📋 Automated Test Cases
 
-Positive form submission – verifies header, welcome message, and client list load.
-Negative form submission – validates alert message when input is empty.
-Client data validation – ensures UI customer data matches backend response.
-Business rules validation – confirms size classification rules (0–100 Small, 101–999 Medium, ≥1000 Big).
-Smoke test – checks that form submission returns a 200 OK status.
+Utilities:
+
+kill-chrome-processes.bat → closes all running ChromeDriver processes.
+
+📋 Automated Test Scenarios
+
+Home & Cart Tests
+
+Navigate to home page and verify products load.
+
+Add one or more products to the cart.
+
+Validate the cart displays the correct number of items.
+
+Purchase Form Tests
+
+Complete the purchase form with valid data.
+
+Verify the system accepts the input.
+
+Confirm the purchase success message appears.
+
+End-to-End Purchase
+
+Select products, complete the form, finalize purchase.
+
+Validate success messages and flow consistency.
 
 📂 Project Structure
-```bash
-graphql
-
-WebDriver-Automation-Framework-with-C-and-SpecFlow-d6/
+WebDriver-Automation-Framework-Demoblaze/
 ├── Config/
-│   └── TestConfiguration.cs      # Centralized configuration
+│   └── TestConfiguration.cs      # Centralized test settings
 ├── Driver/
 │   └── WebDriverManager.cs       # Thread-safe WebDriver management
 ├── Features/
-│   └── WebApplicationTests.feature # BDD scenarios in Gherkin
+│   └── DemoblazePurchase.feature # BDD scenarios in Gherkin
 ├── Hooks/
-│   └── TestHooks.cs              # Automatic Setup/Teardown
+│   └── Hooks.cs                  # Automatic Setup/Teardown
 ├── Pages/
-│   ├── BasePage.cs               # Base class for Page Objects
-│   └── HomePage.cs               # Page Object for the home page
+│   ├── BasePage.cs               # Base Page Object
+│   ├── HomePage.cs               # Home page interactions
+│   └── CartPage.cs               # Cart page interactions
 ├── StepDefinitions/
-│   └── WebApplicationSteps.cs    # Cucumber step implementations
+│   └── DemoblazeSteps.cs         # SpecFlow step implementations
 ├── Utils/
-│   └── WebElementExtensions.cs   # Custom extensions
-├── appsettings.json              # Application configuration
+│   └── WebElementExtensions.cs   # Custom Selenium helpers
+├── appsettings.json              # Project configuration
 ├── specflow.json                 # SpecFlow configuration
 └── WebDriverAutomationFramework.csproj
-```
 
 🛠️ Tech Stack
 
-Frontend & Backend: Node.js + npm
+Automation: C#, .NET, Selenium WebDriver, SpecFlow (Gherkin), NUnit, FluentAssertions
 
-Automation: C#, SpecFlow (Gherkin syntax), Selenium WebDriver, NUnit, FluentAssertions
+Browser: Chrome (via ChromeDriver)
 
-Version control: Git
+Version Control: Git
 
+CI/CD Compatible – Automation can be executed in pipelines
 
