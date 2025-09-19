@@ -45,12 +45,12 @@ Correr todos los tests:
 bash
 Copiar código
 dotnet test WebDriverAutomationFramework.csproj
-Filtrar por categoría finalizar, formulario, visualizar, agregar o api:
+Filtrar por categoría  @signup, @signup_existing, @login_success, @login_fail
 
 bash
 Copiar código
-dotnet test --filter "TestCategory=api"
-(Asegúrate de que tus Scenarios de API tengan la etiqueta [TestCategory("api")])
+dotnet test --filter "TestCategory=api" o 
+"TestCategory= @signup, @signup_existing, @login_success, @login_fail"
 
 📋 Estructura del proyecto (API)
 bash
