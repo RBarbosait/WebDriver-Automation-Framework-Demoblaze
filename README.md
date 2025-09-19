@@ -1,116 +1,87 @@
-WebDriver Automation Framework – Demoblaze QA Project
-📖 Overview
+# WebDriver Automation Framework – Demoblaze QA Project
 
-This project demonstrates QA automation for the Demoblaze web application
-, a demo e-commerce platform.
+## 📖 Overview
+This project demonstrates **QA automation** for the [Demoblaze web application](https://www.demoblaze.com/).
 
-The automation validates realistic user scenarios including product selection, cart management, and purchase workflow:
+It covers the main **purchase workflow**:
+- Navigate to homepage
+- Add products to cart
+- Verify cart contents
+- Complete the purchase form
+- Confirm purchase success
 
-Navigate to the home page and browse products.
+---
 
-Add one or more products to the shopping cart.
+## ⚙️ Project Setup
 
-Verify the cart contains the correct number of items.
-
-Complete the purchase form with valid data.
-
-Confirm the order and verify the success message.
-
-This ensures end-to-end UI and functional validation of the e-commerce flow.
-
-⚙️ Project Setup
-
-Clone the repository:
-
+# 1️⃣ Clone repository
+```bash
 git clone https://github.com/RBarbosait/WebDriver-Automation-Framework-Demoblaze.git
 cd WebDriver-Automation-Framework-Demoblaze
-
-
-Install .NET (if not installed):
-https://dotnet.microsoft.com/es-es/download
-
-Add ChromeDriver:
-
+2️⃣ Install .NET SDK
+Download and install from: https://dotnet.microsoft.com/es-es/download/dotnet
+3️⃣ Install ChromeDriver
+bash
+Copiar código
 dotnet add package Selenium.WebDriver.ChromeDriver --version 139.0.7339.128
-
-
-(adjust version to match your local Chrome version)
-
-Restore and build the solution:
-
+4️⃣ Restore and build the solution
+bash
+Copiar código
 dotnet restore WebDriverAutomationFramework.csproj
 dotnet build WebDriverAutomationFramework.csproj
-
-
-Run All Automated Tests:
-
+▶️ Running Tests
+Run all tests
+bash
+Copiar código
 dotnet test WebDriverAutomationFramework.csproj
-
-
-Run Tests by Category:
-
-dotnet test --filter "TestCategory=form"
-dotnet test --filter "TestCategory=smoke"
+Run tests by category
+bash
+Copiar código
+dotnet test --filter "TestCategory=agregar"
+dotnet test --filter "TestCategory=visualizar"
+dotnet test --filter "TestCategory=formulario"
 dotnet test --filter "TestCategory=finalizar"
-
-
-Utilities:
-
-kill-chrome-processes.bat → closes all running ChromeDriver processes.
-
-📋 Automated Test Scenarios
-
-Home & Cart Tests
-
-Navigate to home page and verify products load.
-
-Add one or more products to the cart.
-
-Validate the cart displays the correct number of items.
-
-Purchase Form Tests
-
-Complete the purchase form with valid data.
-
-Verify the system accepts the input.
-
-Confirm the purchase success message appears.
-
-End-to-End Purchase
-
-Select products, complete the form, finalize purchase.
-
-Validate success messages and flow consistency.
-
+🛠️ Utilities
+Kill all ChromeDriver/Chrome processes
+bash
+Copiar código
+.\Utils\kill-chrome-processes.bat
+Screenshots are automatically saved on test failure in the Screenshots/ folder
 📂 Project Structure
+bash
+Copiar código
 WebDriver-Automation-Framework-Demoblaze/
 ├── Config/
-│   └── TestConfiguration.cs      # Centralized test settings
+│   └── TestConfiguration.cs      # Configuration settings
 ├── Driver/
-│   └── WebDriverManager.cs       # Thread-safe WebDriver management
+│   └── WebDriverManager.cs       # Thread-safe WebDriver manager
 ├── Features/
 │   └── DemoblazePurchase.feature # BDD scenarios in Gherkin
 ├── Hooks/
-│   └── Hooks.cs                  # Automatic Setup/Teardown
+│   └── Hooks.cs                  # Setup/Teardown
 ├── Pages/
-│   ├── BasePage.cs               # Base Page Object
-│   ├── HomePage.cs               # Home page interactions
-│   └── CartPage.cs               # Cart page interactions
+│   ├── BasePage.cs
+│   ├── HomePage.cs
+│   └── CartPage.cs
 ├── StepDefinitions/
-│   └── DemoblazeSteps.cs         # SpecFlow step implementations
+│   └── DemoblazeSteps.cs
 ├── Utils/
-│   └── WebElementExtensions.cs   # Custom Selenium helpers
-├── appsettings.json              # Project configuration
-├── specflow.json                 # SpecFlow configuration
+│   └── WebElementExtensions.cs
+├── appsettings.json
+├── specflow.json
 └── WebDriverAutomationFramework.csproj
+📋 Automated Test Cases
+Agregar productos al carrito – verifies items added correctly.
+
+Visualizar el carrito – ensures products are listed in cart.
+
+Completar el formulario – validates form submission.
+
+Finalizar la compra – confirms success message is displayed.
 
 🛠️ Tech Stack
+Frontend: Demoblaze web app
 
-Automation: C#, .NET, Selenium WebDriver, SpecFlow (Gherkin), NUnit, FluentAssertions
+Automation: C#, SpecFlow (Gherkin syntax), Selenium WebDriver, NUnit, FluentAssertions
 
-Browser: Chrome (via ChromeDriver)
-
-Version Control: Git
-
-CI/CD Compatible – Automation can be executed in pipelines
-
+Version control: Git
